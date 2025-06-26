@@ -1,0 +1,99 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+
+{% if message %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  {{ message }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endif %}
+
+{% if alert %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  {{ alert }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endif %}
+
+<div class="shadow card mb-3" style="margin: 20px;">
+  <div class="row g-0">
+    {% if listing.img %}
+    <div class="col-md-4">
+      <img src="{{ listing.img }}" class="img-fluid rounded-start">
+    </div>
+    {% endif %}
+    <div class="col-md-8">
+      <div class="card-body">
+        <div class="item_description">
+          <h2 class="card-title item_title item_category">{{ listing.title }}</h2>
+          <p class="card-text"><b>Listing Description:</b> {{ listing.description }}</p>
+          <p class="card-text"><b>Category:</b> {{ listing.category }}</p>
+          <p class="card-text"><b>Starting Bid:</b> {{ listing.startbid }} $</p>
+          {% if creator == False and status == True %}
+          <p class="card-text">{{ bid_count }} bid(s) so far. Your bid must be higher than {{ minimum }} $</p>
+          <form method="post" action="{% url 'listing' listing=listing.title %}">
+            {% csrf_token %}
+            <input type="hidden" name="bid_item" value="{{ listing.title }}">
+            <div class="input-group mb-3">
+              <input type="text" class="shadow-sm form-control comment" placeholder="Enter your bid..." name="amount">
+              <button class="shadow-sm btn btn-outline-secondary" type="submit" id="button-addon2">Place Bid</button>
+            </div>
+          </form>
+          {% elif creator == False and status == False %}
+            {% if is_winner == True %}
+              <p class="card-text badge"><h2><span class="badge bg-success">Auction is closed. You are the winner!</span></h2></p>
+            {% elif is_winner == False %}
+              <p class="card-text"><h2><span class="badge bg-danger">Auction is closed. You are not the winner.</span></h2></p>
+            {% endif %}
+          {% elif creator == True and status == True %}
+          <p class="card-text"><b>Highest bid:</b> {{ minimum }} $</p>
+          <p class="card-text">{{ bid_count }} bid(s) so far.</p>
+          <form action="{% url 'listing' listing=listing.title %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="shadow-sm btn">Close Bid</button>
+            <input type="hidden" name="close_bid" value="{{ listing.title }}">
+          </form>
+          {% elif creator == True and status == False %}
+          <button type="button" class="shadow-sm btn" disabled>Closed</button>
+          {% endif %}
+          {% if statement is False %}
+          <form method="post" action="{% url 'listing' listing=listing.title %}">
+            {% csrf_token %}
+            <input type="hidden" name="item" value="{{ listing.title }}">
+            <button type="submit" class="shadow-sm btn">Add to Watchlist</button>
+          </form>
+          {% elif statement is True %}
+          <form method="post" action="{% url 'listing' listing=listing.title %}">
+            {% csrf_token %}
+            <input type="hidden" name="remove" value="{{ listing.title }}">
+            <button class="btn btn-danger shadow-sm" type="submit">Remove from watchlist</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="shadow card" style="margin: 20px;">
+  <div class="card-header">
+    <h2>Comments</h2>
+    <form method="post" action="{% url 'listing' listing=listing.title %}">
+      {% csrf_token %}
+      <input type="hidden" name="name" value="{{ listing.title }}">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control shadow-sm comment" name="comment" placeholder="Enter your comment..">
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Post Comment</button>
+      </div>      
+    </form>
+  </div>
+  <ul class="list-group list-group-flush">
+      {% for comment in comments %}
+      <li class="list-group-item">
+        <p class="opacity-50">Posted by {{ comment.writer }}</p>
+        {{ comment.text }}
+      </li>
+      {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}

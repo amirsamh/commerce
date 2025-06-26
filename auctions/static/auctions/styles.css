@@ -1,0 +1,72 @@
+textarea, select,input:not(.comment) {
+    margin: 10px;
+}
+
+a {
+    text-decoration: none;
+}
+
+nav {
+    background-color: #2E8A99;
+}
+
+h1 {
+    padding: 20px;
+}
+
+form {
+    display: inline;
+}
+
+.item_title {
+    font-size: 50px;
+    padding-top: 20px;
+}
+
+.item_description {
+    font-size: 20px;
+}
+
+.item_category {
+    color: #2E8A99;
+}
+
+.login {
+    text-align: center;
+}
+
+.alert {
+    margin: auto;
+    width: 80%;
+    margin-top: 10px;
+}
+
+.btn:not(.btn-danger) {
+    background-color: #2E8A99;
+    color: white;
+}
+
+.btn:hover:not(.btn-danger) {
+    background-color: #1F6E8C;
+    color: white;
+    transition: 0.3s;
+}
+
+.category {
+    background-color: #2E8A99;
+}
+
+.category-title {
+    color: white;
+}
+
+.form {
+    margin: auto;
+    width: 30%;
+    text-align: center;
+}
+
+.hint {
+    text-align: center;
+    padding: 30px;
+}

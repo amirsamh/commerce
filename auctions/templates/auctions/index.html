@@ -1,0 +1,42 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+
+        <h1>Active Listings</h1>
+        {% if not listings %}
+            <div class="alert alert-warning d-flex align-items-center" role="alert">
+                Sorry! There is currently no listing in this page.
+            </div>
+        {% endif %}
+        {% if listings %}
+            <div class="row row-cols-1 row-cols-md-3 g-4 container-fluid">
+                {% for listing in listings %}
+                    {% if listing.is_active == True %}
+                    <div class="col">
+                        <div class="shadow card mb-3 h-100">
+                            <div class="row g-0">
+                            {% if listing.img %}
+                            <div class="col-md-4">
+                                <img src="{{ listing.img }}" class="img-fluid rounded-start">
+                            </div>
+                            {% endif %}
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    {% if listing.is_active == False %}
+                                    <h6><span class="badge text-bg-danger">Closed</span></h6>
+                                    {% endif %}
+                                    <h6 class="item_category">{{ listing.category }}</h6>
+                                    <h5 class="card-title">{{ listing.title }}</h5>
+                                    <h6>{{ listing.startbid }} $</h6>
+                                    <p class="card-text">{{ listing.description }}</p>
+                                    <a class="btn shadow" href="{% url 'listing' listing=listing.title %}">View listing</a>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    
+{% endblock %}

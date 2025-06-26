@@ -1,0 +1,37 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <h1>New Listing</h1>
+
+    {% if message %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ success }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
+
+
+    <div class="form">
+        <form method="post">
+            {% csrf_token %}
+            <select name="category" class="form-select" id="select">
+                {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+            </select>
+            <input class="form-control" type="text" name="title" placeholder="Title">
+            <input class="form-control" type="text" name="img" placeholder="Image URL (Optional)">
+            <input class="form-control" type="text" name="startbid" placeholder="Starting Bid">
+            <textarea name="description" class="form-control" placeholder="Description"></textarea>
+            <button class="btn" type="submit">Create</button>
+        </form>
+    </div>
+
+{% endblock %}
